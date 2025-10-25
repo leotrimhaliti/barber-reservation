@@ -15,6 +15,3 @@ Built with modern tools for speed, simplicity, and ease of use.
 - Create and manage hair appointment reservations  
 - Real-time data with Supabase  
 - Clean, responsive UI  
-
-## 📄 License
-This project is open-source and free to use.
