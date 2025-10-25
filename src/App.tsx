@@ -91,7 +91,11 @@ function App() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <Scissors className="w-10 h-10 text-gray-800"/>
+            <img 
+              src="/image.png" 
+              alt="VikiBarber Logo" 
+              className="w-20 h-20 object-contain"
+            />
           </div>
           <h1 className="text-4xl font-bold text-gray-800 mb-2">VikiBarber</h1>
           <p className="text-gray-600 text-lg">Rezervoni terminin tuaj online</p>
