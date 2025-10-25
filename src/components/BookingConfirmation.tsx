@@ -18,22 +18,26 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
 }) => {
   const [clientName, setClientName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState(''); 
-  
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('sq-AL', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+
+  // --- funksioni për format shqip ---
+  const weekdays = ['E Diel', 'E Hënë', 'E Martë', 'E Mërkurë', 'E Enjte', 'E Premte', 'E Shtunë'];
+  const months = ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'];
+
+  const formatDateShqip = (date: Date) => {
+    const dayName = weekdays[date.getDay()];
+    const day = date.getDate();
+    const monthName = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${dayName}, ${day} ${monthName} ${year}`;
   };
+  // -------------------------------------
 
   const handleConfirmClick = () => {
-      if (clientName.trim() && phoneNumber.trim()) {
-          onConfirm(clientName.trim(), phoneNumber.trim()); 
-      } else {
-          alert("Ju lutem plotësoni Emrin dhe Numrin e Telefonit!");
-      }
+    if (clientName.trim() && phoneNumber.trim()) {
+      onConfirm(clientName.trim(), phoneNumber.trim()); 
+    } else {
+      alert("Ju lutem plotësoni Emrin dhe Numrin e Telefonit!");
+    }
   };
 
   return (
@@ -50,52 +54,50 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
         </p>
       </div>
       
-      {/* Formulari i ri */}
       <div className="space-y-4 mb-6">
-         <div>
-            <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-1">
-                Emri dhe Mbiemri
-            </label>
-            <div className="relative">
-                <User className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                <input
-                    id="clientName"
-                    type="text"
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
-                    placeholder="Emri juaj i plotë"
-                    required
-                    className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800 transition"
-                    disabled={isSaving}
-                />
-            </div>
-         </div>
+        <div>
+          <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-1">
+            Emri dhe Mbiemri
+          </label>
+          <div className="relative">
+            <User className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            <input
+              id="clientName"
+              type="text"
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+              placeholder="Emri juaj i plotë"
+              required
+              className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800 transition"
+              disabled={isSaving}
+            />
+          </div>
+        </div>
          
-         <div>
-            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                Numri i Telefonit
-            </label>
-            <div className="relative">
-                <Phone className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                <input
-                    id="phoneNumber"
-                    type="tel" // Përdor tel për formatin e telefonit
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    placeholder="P.sh. +383 44 123 456"
-                    required
-                    className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800 transition"
-                    disabled={isSaving}
-                />
-            </div>
-         </div>
+        <div>
+          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+            Numri i Telefonit
+          </label>
+          <div className="relative">
+            <Phone className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            <input
+              id="phoneNumber"
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="P.sh. +383 44 123 456"
+              required
+              className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-gray-800 focus:border-gray-800 transition"
+              disabled={isSaving}
+            />
+          </div>
+        </div>
          
-        {/* Detajet e rezervimit */}
         <div className="flex items-center p-3 bg-gray-50 rounded-lg">
           <Calendar className="w-5 h-5 text-gray-700 mr-3" />
           <div>
             <p className="text-sm text-gray-500">Data</p>
-            <p className="font-medium text-gray-800">{formatDate(selectedDate)}</p>
+            <p className="font-medium text-gray-800">{formatDateShqip(selectedDate)}</p>
           </div>
         </div>
 
@@ -107,7 +109,6 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
           </div>
         </div>
 
-        {/* Shërbimi */}
         <div className="flex items-center p-3 bg-gray-50 rounded-lg">
           <Mail className="w-5 h-5 text-gray-700 mr-3" />
           <div>

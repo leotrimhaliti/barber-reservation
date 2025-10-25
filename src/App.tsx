@@ -139,7 +139,7 @@ function App() {
                 <div className="space-y-4">
                   <div className="p-4 bg-blue-50 rounded-lg">
                     <h4 className="font-medium text-gray-800 mb-2">Orari i punës</h4>
-                    <p className="text-gray-600 text-sm">E Hënë - E Shtunë: 09:00 - 20:00</p>
+                    <p className="text-gray-600 text-sm">E Hënë - E Shtunë: 08:00 - 20:00</p>
                     <p className="text-gray-600 text-sm">E Diel: Mbyllur</p>
                   </div>
                   <div className="p-4 bg-green-50 rounded-lg">
