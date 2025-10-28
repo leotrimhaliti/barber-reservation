@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, User, Check, Mail, Phone, Loader2 } from 'lucide-react'; 
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, User, Check, Mail, Phone, Loader2, AlertTriangle } from 'lucide-react'; 
 
 interface BookingConfirmationProps {
   selectedDate: Date;
@@ -18,6 +18,7 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
 }) => {
   const [clientName, setClientName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState(''); 
+  const [isPastTime, setIsPastTime] = useState(false);
 
   // --- funksioni për format shqip ---
   const weekdays = ['E Diel', 'E Hënë', 'E Martë', 'E Mërkurë', 'E Enjte', 'E Premte', 'E Shtunë'];
@@ -32,9 +33,20 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
   };
   // -------------------------------------
 
+  // 🔒 kontrollon nëse ora e zgjedhur ka kalu (për datën e sotme)
+  useEffect(() => {
+    const now = new Date();
+    const appointment = new Date(selectedDate);
+    const [hours, minutes] = selectedTime.split(':').map(Number);
+    appointment.setHours(hours, minutes, 0, 0);
+    setIsPastTime(appointment < now);
+  }, [selectedDate, selectedTime]);
+
   const handleConfirmClick = () => {
-    if (clientName.trim() && phoneNumber.trim()) {
+    if (clientName.trim() && phoneNumber.trim() && !isPastTime) {
       onConfirm(clientName.trim(), phoneNumber.trim()); 
+    } else if (isPastTime) {
+      alert("Nuk mund të rezervoni një orë që ka kaluar!");
     } else {
       alert("Ju lutem plotësoni Emrin dhe Numrin e Telefonit!");
     }
@@ -105,9 +117,18 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
           <Clock className="w-5 h-5 text-gray-700 mr-3" />
           <div>
             <p className="text-sm text-gray-500">Ora</p>
-            <p className="font-medium text-gray-800">{selectedTime}</p>
+            <p className={`font-medium ${isPastTime ? 'text-red-500' : 'text-gray-800'}`}>
+              {selectedTime}
+            </p>
           </div>
         </div>
+
+        {isPastTime && (
+          <div className="flex items-center text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+            <AlertTriangle className="w-5 h-5 mr-2" />
+            Nuk mund të rezervoni një orë që ka kaluar.
+          </div>
+        )}
 
         <div className="flex items-center p-3 bg-gray-50 rounded-lg">
           <Mail className="w-5 h-5 text-gray-700 mr-3" />
@@ -128,7 +149,7 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
         </button>
         <button
           onClick={handleConfirmClick}
-          disabled={!clientName.trim() || !phoneNumber.trim() || isSaving} 
+          disabled={!clientName.trim() || !phoneNumber.trim() || isPastTime || isSaving} 
           className="flex-1 py-3 px-4 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-900 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
           {isSaving ? (
